@@ -760,7 +760,6 @@ table.data th {
 
 .shift-actions {
   display: flex;
-  flex-direction: column;
   align-items: stretch;
   gap: 0.55rem;
   min-width: 220px;
