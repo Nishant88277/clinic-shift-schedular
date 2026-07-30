@@ -1,0 +1,9 @@
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: file:/app/prisma/dev.db
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: docker-dev-secret-change-me
