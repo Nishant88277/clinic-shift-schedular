@@ -5,6 +5,9 @@ WORKDIR /app
 RUN apt-get update -y && apt-get install -y openssl ca-certificates && rm -rf /var/lib/apt/lists/*
 
 COPY package.json package-lock.json ./
+# Needed before `npm ci` because postinstall runs `prisma generate`
+COPY prisma ./prisma
+
 RUN npm ci
 
 COPY . .
