@@ -15,9 +15,6 @@ export default async function LoginPage() {
           Managers schedule coverage. Staff claim open shifts.
         </p>
         <LoginForm />
-        <p className="muted" style={{ fontSize: "0.85rem", marginTop: "1.25rem" }}>
-          Try <code>manager@clinic.test</code> / <code>password123</code>
-        </p>
       </div>
     </main>
   );

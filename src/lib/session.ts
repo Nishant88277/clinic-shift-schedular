@@ -15,19 +15,15 @@ export async function getSessionUserId(): Promise<string | null> {
   if (session?.user?.id) return session.user.id;
 
   const cookieStore = await cookies();
-  const cookieHeader = cookieStore
-    .getAll()
-    .map((c) => `${c.name}=${c.value}`)
-    .join("; ");
+  const cookieMap = Object.fromEntries(
+    cookieStore.getAll().map((c) => [c.name, c.value]),
+  );
 
-  if (!cookieHeader) return null;
+  if (Object.keys(cookieMap).length === 0) return null;
 
   const token = await getToken({
-    req: {
-      headers: {
-        cookie: cookieHeader,
-      },
-    } as { headers: { cookie: string } },
+    // next-auth accepts a minimal req-like object with cookies in App Router
+    req: { cookies: cookieMap } as never,
     secret: process.env.NEXTAUTH_SECRET,
   });
 
