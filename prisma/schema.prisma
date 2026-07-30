@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String       @id @default(cuid())
+  email        String       @unique
+  name         String
+  passwordHash String
+  role         String
+  profession   String?
+  externalId   String?      @unique
+  createdAt    DateTime     @default(now())
+  claims       ShiftClaim[]
+}
+
+model Shift {
+  id               String       @id @default(cuid())
+  externalId       String?      @unique
+  startAt          DateTime
+  endAt            DateTime
+  reqDoctors       Int          @default(0)
+  reqNurses        Int          @default(0)
+  reqReceptionists Int          @default(0)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  claims           ShiftClaim[]
+}
+
+model ShiftClaim {
+  id        String   @id @default(cuid())
+  shiftId   String
+  userId    String
+  createdAt DateTime @default(now())
+  shift     Shift    @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([shiftId, userId])
+  @@index([userId])
+  @@index([shiftId])
+}
+
+model ImportBatch {
+  id          String            @id @default(cuid())
+  kind        String
+  sourceName  String
+  accepted    Int
+  rejected    Int
+  merged      Int
+  createdAt   DateTime          @default(now())
+  createdById String?
+  rows        ImportRowResult[]
+}
+
+model ImportRowResult {
+  id        String      @id @default(cuid())
+  batchId   String
+  rowNumber Int
+  rawRow    String
+  status    String
+  reason    String
+  action    String
+  batch     ImportBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  @@index([batchId])
+}
