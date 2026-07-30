@@ -84,17 +84,18 @@ This app uses **SQLite** (seeded in the Docker image). Deploy as a **Docker Web 
    - **Runtime:** Docker
    - **Branch:** `main`
    - **Instance:** Free
-4. Environment variables:
+4. Environment variables (Render → Environment):
    - `DATABASE_URL` = `file:/app/prisma/dev.db`
    - `NEXTAUTH_SECRET` = any long random string (Render can generate one)
-   - `NEXTAUTH_URL` = your public URL, e.g. `https://clinic-shift-schedular.onrender.com`  
-     (set this **after** Render shows the URL, then save & redeploy once)
+   - `NEXTAUTH_URL` = `https://clinic-shift-schedular.onrender.com`  
+     (**Must** match your live HTTPS URL exactly, or login/cookies break.)
 5. Deploy. First build can take several minutes (install + seed + `next build`).
 
 ### After deploy
 
 - Open the Render URL and sign in with the seeded accounts below.
-- **Cold starts:** the free tier spins down after idle time; the first request may take 30–60+ seconds. Note this for reviewers.
+- **Cold starts:** the free tier spins down after idle time; the first request may take 30–60+ seconds. Wait until the page fully loads (with CSS) before logging in.
+- If the page looks unstyled or `/login` briefly 404s after a redeploy, hard-refresh (`Cmd+Shift+R`) — that clears a stale HTML shell pointing at old JS/CSS files.
 
 ### Other hosts
 

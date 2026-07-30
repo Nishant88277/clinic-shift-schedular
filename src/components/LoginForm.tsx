@@ -14,18 +14,24 @@ export function LoginForm() {
     setPending(true);
     setError(null);
     const fd = new FormData(e.currentTarget);
-    const res = await signIn("credentials", {
-      email: String(fd.get("email") ?? ""),
-      password: String(fd.get("password") ?? ""),
-      redirect: false,
-    });
-    setPending(false);
-    if (res?.error) {
-      setError("Invalid email or password");
-      return;
+    try {
+      const res = await signIn("credentials", {
+        email: String(fd.get("email") ?? ""),
+        password: String(fd.get("password") ?? ""),
+        redirect: false,
+        callbackUrl: "/",
+      });
+      if (res?.error) {
+        setError("Invalid email or password");
+        setPending(false);
+        return;
+      }
+      router.replace("/");
+      router.refresh();
+    } catch {
+      setError("Sign-in failed. If the site just woke up, wait a few seconds and try again.");
+      setPending(false);
     }
-    router.push("/");
-    router.refresh();
   }
 
   return (
