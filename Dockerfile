@@ -9,11 +9,13 @@ RUN npm ci
 
 COPY . .
 
+# Bake a seeded SQLite DB into the image (good for take-home demos)
 ENV DATABASE_URL="file:/app/prisma/dev.db"
-ENV NEXTAUTH_URL="http://localhost:3000"
-ENV NEXTAUTH_SECRET="docker-dev-secret-change-me"
-
 RUN npx prisma generate && npx prisma db push && npx tsx prisma/seed.ts && npm run build
 
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
 EXPOSE 3000
+
+# Runtime secrets/URL should be set by the host (Render/Fly), not baked in
 CMD ["npm", "start"]

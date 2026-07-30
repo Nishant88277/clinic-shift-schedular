@@ -71,12 +71,41 @@ npm test
 - Manager CSV upload + **Import report** page
 - Coverage dashboard (week view, jump to any week, missing roles)
 
-## Deploy notes
+## Deploy (Render — recommended)
 
-SQLite is file-based. Prefer hosts with a persistent disk (Fly.io, Render disk, Docker) rather than ephemeral serverless FS (plain Vercel). Cold starts may apply on free tiers.
+This app uses **SQLite** (seeded in the Docker image). Deploy as a **Docker Web Service** — not plain Vercel (ephemeral/read-only filesystem breaks claims).
 
-For production, **do not reuse the committed `.env` secret** — set `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, and `DATABASE_URL` in the host environment.
+### Steps (about 5–10 minutes)
+
+1. Go to [https://render.com](https://render.com) and sign in with GitHub.
+2. **New → Blueprint** (uses `render.yaml`) **or** **New → Web Service** and select  
+   `Nishant88277/clinic-shift-schedular`.
+3. Settings if not using the Blueprint:
+   - **Runtime:** Docker
+   - **Branch:** `main`
+   - **Instance:** Free
+4. Environment variables:
+   - `DATABASE_URL` = `file:/app/prisma/dev.db`
+   - `NEXTAUTH_SECRET` = any long random string (Render can generate one)
+   - `NEXTAUTH_URL` = your public URL, e.g. `https://clinic-shift-schedular.onrender.com`  
+     (set this **after** Render shows the URL, then save & redeploy once)
+5. Deploy. First build can take several minutes (install + seed + `next build`).
+
+### After deploy
+
+- Open the Render URL and sign in with the seeded accounts below.
+- **Cold starts:** the free tier spins down after idle time; the first request may take 30–60+ seconds. Note this for reviewers.
+
+### Other hosts
+
+| Host | Fit |
+|------|-----|
+| **Render** (Docker) | Best simple path with this repo |
+| **Fly.io** | Good if you want a persistent volume |
+| **Railway** | Works with Docker |
+| **Vercel alone** | Not recommended with SQLite file DB |
 
 ## Docs
 
 - [DECISIONS.md](./DECISIONS.md) — product/engineering choices
+- [render.yaml](./render.yaml) — Render Blueprint config

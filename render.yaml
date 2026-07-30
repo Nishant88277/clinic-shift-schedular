@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: clinic-shift-schedular
+    runtime: docker
+    plan: free
+    healthCheckPath: /login
+    envVars:
+      - key: DATABASE_URL
+        value: file:/app/prisma/dev.db
+      - key: NEXTAUTH_SECRET
+        generateValue: true
+      - key: NEXTAUTH_URL
+        sync: false

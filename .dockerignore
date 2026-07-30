@@ -1,0 +1,13 @@
+node_modules
+.next
+.git
+.gitignore
+*.md
+!README.md
+.env*.local
+prisma/*.db-journal
+coverage
+.agents
+.claude
+.windsurf
+skills-lock.json
