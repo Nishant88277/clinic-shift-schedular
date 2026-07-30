@@ -18,6 +18,22 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+`npm run setup` installs dependencies, creates the SQLite database, and seeds staff/shifts from the CSV imports.
+
+### Environment file (committed on purpose)
+
+A local `.env` is **included in this repository** so reviewers can clone and run without extra setup:
+
+```env
+DATABASE_URL="file:./dev.db"
+NEXTAUTH_SECRET="clinic-shift-scheduler-dev-secret-change-me"
+NEXTAUTH_URL="http://localhost:3000"
+```
+
+**These are development-only values.** Environment files with secrets are normally **not** committed; this one is tracked deliberately for the take-home so the app runs smoothly out of the box. For a real deployment, generate a new `NEXTAUTH_SECRET` and keep it out of git (use host env vars / `.env.local`, which remains gitignored).
+
+`.env.example` mirrors the same keys if you prefer to recreate the file yourself.
+
 ### One-command Docker
 
 ```bash
@@ -59,7 +75,7 @@ npm test
 
 SQLite is file-based. Prefer hosts with a persistent disk (Fly.io, Render disk, Docker) rather than ephemeral serverless FS (plain Vercel). Cold starts may apply on free tiers.
 
-Set `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, and `DATABASE_URL` in the environment.
+For production, **do not reuse the committed `.env` secret** — set `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, and `DATABASE_URL` in the host environment.
 
 ## Docs
 

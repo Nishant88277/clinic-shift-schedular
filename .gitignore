@@ -22,7 +22,9 @@ build
 dist
 
 # Env
-.env
+# NOTE: `.env` is intentionally tracked in this take-home so reviewers can run
+# the app without copying env files. Do not put real production secrets here.
+# Local overrides still stay private:
 .env*.local
 !.env.example
 
