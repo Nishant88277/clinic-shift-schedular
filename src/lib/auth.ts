@@ -43,11 +43,15 @@ export const authOptions: NextAuthOptions = {
         token.role = u.role;
         token.profession = u.profession ?? null;
       }
+      // NextAuth always sets `sub`; keep `id` in sync for server actions / getToken.
+      if (!token.id && token.sub) {
+        token.id = token.sub;
+      }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string;
+        session.user.id = (token.id as string) || (token.sub as string);
         session.user.role = token.role as "manager" | "staff";
         session.user.profession = (token.profession as "doctor" | "nurse" | "receptionist" | null) ?? null;
       }

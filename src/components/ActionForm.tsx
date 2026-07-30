@@ -30,6 +30,11 @@ export function ActionForm({
         startTransition(async () => {
           const result = await action(fd);
           if (!result.ok) {
+            if (result.error === "Please sign in") {
+              router.replace("/login");
+              router.refresh();
+              return;
+            }
             setError(result.error);
             return;
           }
